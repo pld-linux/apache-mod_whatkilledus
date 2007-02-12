@@ -1,7 +1,7 @@
 %define		mod_name	whatkilledus
 %define 	apxs		/usr/sbin/apxs
 Summary:	Knows what a thread was handling in case the thread segfaults
-Summary(pl.UTF-8):   Moduł wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
+Summary(pl.UTF-8):	Moduł wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
 Version:	1.0
 Release:	1

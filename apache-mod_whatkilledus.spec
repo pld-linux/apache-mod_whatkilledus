@@ -1,7 +1,7 @@
 %define		mod_name	whatkilledus
 %define 	apxs		/usr/sbin/apxs
 Summary:	Knows what a thread was handling in case the thread segfaults
-Summary(pl):	Modu³ wiedz±cy, co obs³ugiwa³ w±tek w przypadku naruszenia ochrony pamiêci
+Summary(pl.UTF-8):   ModuÅ‚ wiedzÄ…cy, co obsÅ‚ugiwaÅ‚ wÄ…tek w przypadku naruszenia ochrony pamiÄ™ci
 Name:		apache-mod_%{mod_name}
 Version:	1.0
 Release:	1
@@ -22,10 +22,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Keeps a little bit of state on each active connection, which allows it
 to know what a thread was handling in case the thread segfaults.
 
-%description -l pl
-Modu³ przechowuj±cy wybrane informacje o stanie ka¿dego aktywnego
-po³±czenia, pozwalaj±ce dowiedzieæ siê, co obs³ugiwa³ w±tek w
-sytuacji, kiedy spowodowa³ naruszenie ochrony pamiêci.
+%description -l pl.UTF-8
+ModuÅ‚ przechowujÄ…cy wybrane informacje o stanie kaÅ¼dego aktywnego
+poÅ‚Ä…czenia, pozwalajÄ…ce dowiedzieÄ‡ siÄ™, co obsÅ‚ugiwaÅ‚ wÄ…tek w
+sytuacji, kiedy spowodowaÅ‚ naruszenie ochrony pamiÄ™ci.
 
 %prep
 %setup -q -c -T

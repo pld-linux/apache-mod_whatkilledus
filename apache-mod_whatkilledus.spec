@@ -53,6 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 %service -q httpd restart
+touch /var/log/httpd/whatkilledus_log && chown root:http /var/log/httpd/whatkilledus_log && chmod 620 /var/log/httpd/whatkilledus_log
 
 %postun
 if [ "$1" = "0" ]; then

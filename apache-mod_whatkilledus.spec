@@ -1,9 +1,10 @@
 %define		mod_name	whatkilledus
 %define 	apxs		/usr/sbin/apxs
-Summary:	Apache module: logs request when child process crashes
+Summary:	Apache module: knows what a thread was handling in case the thread segfaults
+Summary(pl.UTF-8):	Moduł apache wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
-Version:	0.1
-Release:	0.20040323.1
+Version:	1.0
+Release:	1.20040323.1
 License:	Apache v2.0
 Group:		Networking/Daemons
 Source0:	http://people.apache.org/~trawick/mod_whatkilledus.c
@@ -18,13 +19,16 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
 %define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)
-%define		_pkglogdir	%(%{apxs} -q PREFIX 2>/dev/null)/logs
 
 %description
-mod_whatkilledus is an experimental module for Apache httpd 2.x which
-tracks the current request and logs a report of the active request
-when a child process crashes. You should verify that it works
-reasonably on your system before putting it in production.
+Keeps a little bit of state on each active connection, which allows it
+to know what a thread was handling in case the thread segfaults.
+
+%description -l pl.UTF-8
+Moduł przechowujący wybrane informacje o stanie każdego aktywnego
+połączenia, pozwalające dowiedzieć się, co obsługiwał wątek w
+sytuacji, kiedy spowodował naruszenie ochrony pamięci.
+
 
 %prep
 %setup -q -c -T
@@ -42,7 +46,7 @@ install .libs/mod_%{mod_name}.so $RPM_BUILD_ROOT%{_pkglibdir}
 
 touch $RPM_BUILD_ROOT/var/log/httpd/whatkilledus_log
 
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/90_mod_%{mod_name}.conf << 'EOF'
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/68_mod_%{mod_name}.conf << 'EOF'
 LoadModule %{mod_name}_module modules/mod_%{mod_name}.so
 EnableExceptionHook On
 WhatKilledUsLog /var/log/httpd/whatkilledus_log

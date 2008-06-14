@@ -44,10 +44,8 @@ touch $RPM_BUILD_ROOT/var/log/httpd/whatkilledus_log
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/90_mod_%{mod_name}.conf << 'EOF'
 LoadModule %{mod_name}_module modules/mod_%{mod_name}.so
-<IfModule mod_%{mod_name}.c>
 EnableExceptionHook On
-whatkilledus_log /var/log/httpd/error.log
-</IfModule>
+WhatKilledUsLog /var/log/httpd/whatkilledus_log
 EOF
 
 %clean

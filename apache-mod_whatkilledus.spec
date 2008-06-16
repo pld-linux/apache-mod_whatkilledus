@@ -29,7 +29,6 @@ Moduł przechowujący wybrane informacje o stanie każdego aktywnego
 połączenia, pozwalające dowiedzieć się, co obsługiwał wątek w
 sytuacji, kiedy spowodował naruszenie ochrony pamięci.
 
-
 %prep
 %setup -q -c -T
 install %{SOURCE0} .

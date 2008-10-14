@@ -4,7 +4,7 @@ Summary:	Apache module: knows what a thread was handling in case the thread segf
 Summary(pl.UTF-8):	Moduł apache wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
 Version:	1.0
-Release:	1.20040323.1
+Release:	1.20040323.2
 License:	Apache v2.0
 Group:		Networking/Daemons
 Source0:	http://people.apache.org/~trawick/mod_whatkilledus.c
@@ -17,8 +17,8 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	apache(modules-api) = %apache_modules_api
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)/conf.d
 %define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
-%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)
 
 %description
 Keeps a little bit of state on each active connection, which allows it
@@ -34,18 +34,18 @@ sytuacji, kiedy spowodował naruszenie ochrony pamięci.
 install %{SOURCE0} .
 
 %build
-%{__cc} `%{_bindir}/apr-1-config --includes --cppflags` %{SOURCE1} -o gen_test_char
+%{__cc} $(%{_bindir}/apr-1-config --includes --cppflags) %{SOURCE1} -o gen_test_char
 ./gen_test_char > test_char.h
 %{apxs} -c mod_%{mod_name}.c -o mod_%{mod_name}.la
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_pkglibdir},%{_sysconfdir}/httpd.conf,/var/log/httpd}
+install -d $RPM_BUILD_ROOT{%{_pkglibdir},%{_sysconfdir},/var/log/httpd}
 install .libs/mod_%{mod_name}.so $RPM_BUILD_ROOT%{_pkglibdir}
 
 touch $RPM_BUILD_ROOT/var/log/httpd/whatkilledus_log
 
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/68_mod_%{mod_name}.conf << 'EOF'
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/68_mod_%{mod_name}.conf << 'EOF'
 LoadModule %{mod_name}_module modules/mod_%{mod_name}.so
 EnableExceptionHook On
 WhatKilledUsLog /var/log/httpd/whatkilledus_log
@@ -65,7 +65,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf/*_mod_%{mod_name}.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*_mod_%{mod_name}.conf
 %attr(755,root,root) %{_pkglibdir}/*.so
 # append by webserver
 %attr(620,root,http) %ghost /var/log/httpd/whatkilledus_log

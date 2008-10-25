@@ -6,7 +6,7 @@ Name:		apache-mod_%{mod_name}
 Version:	1.0
 Release:	1.20040323.2
 License:	Apache v2.0
-Group:		Networking/Daemons
+Group:		Networking/Daemons/HTTP
 Source0:	http://people.apache.org/~trawick/mod_whatkilledus.c
 # Source0-md5:	e59c5d56e294a31e5b158ad5e4553001
 Source1:	http://mirrors.ludost.net/gentoo-portage/www-apache/mod_whatkilledus/files/gen_test_char.c

@@ -4,7 +4,7 @@ Summary:	Apache module: knows what a thread was handling in case the thread segf
 Summary(pl.UTF-8):	Moduł apache wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
 Version:	1.0
-Release:	1.20090203.1
+Release:	1.20090203.2
 License:	Apache v2.0
 Group:		Networking/Daemons/HTTP
 Source0:	http://people.apache.org/~trawick/mod_whatkilledus.c

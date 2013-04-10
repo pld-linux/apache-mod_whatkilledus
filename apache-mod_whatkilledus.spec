@@ -3,14 +3,15 @@
 Summary:	Apache module: knows what a thread was handling in case the thread segfaults
 Summary(pl.UTF-8):	Moduł apache wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
-Version:	1.0
-Release:	1.20090203.2
+Version:	2.00
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/HTTP
-Source0:	http://people.apache.org/~trawick/mod_whatkilledus.c
-# Source0-md5:	ac4150a2d8b41bfd087de8d237b24378
+Source0:	http://emptyhammock.com/downloads/wku_bt-2.00.zip
+# Source0-md5:	acc3f8497b0aabaad5c24d8d34d53ff1
 Source1:	http://mirrors.ludost.net/gentoo-portage/www-apache/mod_whatkilledus/files/gen_test_char.c
 # Source1-md5:	7c4e734d1afc695a5be53581998f3700
+URL:		http://emptyhammock.com/projects/httpd/diag/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -30,13 +31,14 @@ połączenia, pozwalające dowiedzieć się, co obsługiwał wątek w
 sytuacji, kiedy spowodował naruszenie ochrony pamięci.
 
 %prep
-%setup -q -c -T
-install %{SOURCE0} .
+%setup -q -n wku_bt-%{version}
 
 %build
-%{__cc} $(%{_bindir}/apr-1-config --includes --cppflags) %{SOURCE1} -o gen_test_char
-./gen_test_char > test_char.h
-%{apxs} -c mod_%{mod_name}.c -o mod_%{mod_name}.la
+%{apxs} -c mod_%{mod_name}.c diag.c \
+%if "%{__lib}" == "lib64"
+	-DDIAG_BITS_64=1 \
+%endif
+	-o mod_%{mod_name}.la
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -48,7 +50,7 @@ touch $RPM_BUILD_ROOT/var/log/httpd/whatkilledus_log
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/68_mod_%{mod_name}.conf << 'EOF'
 LoadModule %{mod_name}_module modules/mod_%{mod_name}.so
 EnableExceptionHook On
-WhatKilledUsLog /var/log/httpd/whatkilledus_log
+# WKUObscureInRequest On
 EOF
 
 %clean
@@ -63,8 +65,12 @@ if [ "$1" = "0" ]; then
 	%service -q httpd restart
 fi
 
+%triggerpostun -- %{name} < 2.00
+sed -i -e 's#^WhatKilledUsLog.*##g' %{_sysconfdir}/68_mod_%{mod_name}.conf
+
 %files
 %defattr(644,root,root,755)
+%doc CHANGES.txt NOTICE.txt 
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*_mod_%{mod_name}.conf
 %attr(755,root,root) %{_pkglibdir}/*.so
 # append by webserver

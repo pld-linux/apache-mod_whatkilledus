@@ -3,12 +3,12 @@
 Summary:	Apache module: knows what a thread was handling in case the thread segfaults
 Summary(pl.UTF-8):	Moduł apache wiedzący, co obsługiwał wątek w przypadku naruszenia ochrony pamięci
 Name:		apache-mod_%{mod_name}
-Version:	2.00
+Version:	2.01
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/HTTP
-Source0:	http://emptyhammock.com/downloads/wku_bt-2.00.zip
-# Source0-md5:	acc3f8497b0aabaad5c24d8d34d53ff1
+Source0:	http://emptyhammock.com/downloads/wku_bt-%{version}.zip
+# Source0-md5:	32bbe148f6cb2b8714166388f94d9129
 Source1:	http://mirrors.ludost.net/gentoo-portage/www-apache/mod_whatkilledus/files/gen_test_char.c
 # Source1-md5:	7c4e734d1afc695a5be53581998f3700
 URL:		http://emptyhammock.com/projects/httpd/diag/
@@ -35,6 +35,7 @@ sytuacji, kiedy spowodował naruszenie ochrony pamięci.
 
 %build
 %{apxs} -c mod_%{mod_name}.c diag.c \
+	-DDIAG_HAVE_LIBUNWIND_BACKTRACE=1 \
 %if "%{__lib}" == "lib64"
 	-DDIAG_BITS_64=1 \
 %endif
